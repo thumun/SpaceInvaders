@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TreeEditor;
 using Unity.VisualScripting;
 using UnityEditor.Build;
 using UnityEngine;
@@ -13,6 +14,9 @@ public class Ship : MonoBehaviour
 	public bool noMovement;
 	public bool noBullet = false;
 
+	public float bulletTimer = 0f;
+	public float bulletSpawner = 0.4f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +27,8 @@ public class Ship : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+		bulletTimer += Time.deltaTime;
 
 		if (!noMovement)
 		{
@@ -42,11 +48,14 @@ public class Ship : MonoBehaviour
 
 		if (!noBullet)
 		{
-			if (Input.GetAxis("Vertical") > 0)
+			if (Input.GetAxis("Vertical") > 0 && bulletSpawner < bulletTimer)
 			{
-				var b = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+				Vector3 newPos = transform.position;
+				newPos.y = -11f;
+				var b = Instantiate(bulletPrefab, newPos, Quaternion.identity);
 				b.dir = Vector3.up; // can change if can rotate ship 
-				noBullet = true; 
+				noBullet = true;
+				bulletTimer = 0f; 
 			}
 		}
 
@@ -63,6 +72,8 @@ public class Ship : MonoBehaviour
 	private void OnCollisionEnter(Collision collision)
 	{
 		Collider collider = collision.collider;
+
+		Debug.Log(collider.tag);
 
 		if (collider.CompareTag("AlienBullet"))
 		{

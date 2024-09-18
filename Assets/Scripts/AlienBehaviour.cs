@@ -23,7 +23,7 @@ public class AlienBehaviour : MonoBehaviour
     public GameObject alienBulletPrefab;
 
     public float timer;
-    public float bulletSpawn = 2.0f; 
+    public float bulletSpawn = 0.5f; 
 
     //float leftEdge = Camera.main.ViewportToWorldPoint;
     //float rightEdge = 41.9f;
@@ -70,31 +70,35 @@ public class AlienBehaviour : MonoBehaviour
     void Update()
     {
         timer += Time.deltaTime;
-		//speed += transform.position.y;
 
 		this.transform.position += direction * speed * Time.deltaTime;
-		SpeedUp();
+		//SpeedUp();
 
 
-		Debug.Log($"pos: {transform.position}");
+		//Debug.Log($"pos: {transform.position}");
 		//Debug.Log($"dir: {direction}");
-		Debug.Log($"speed: {speed}");
+		//Debug.Log($"speed: {speed}");
         //Debug.Log($"time: {Time.deltaTime}");
 
         int indx = UnityEngine.Random.Range(0, 11);
-        int i = 0; 
+        int i = 0;
+
+        bool isDropped = false; 
 
 		foreach (Transform alien in transform)
         {
 
             Alien alienScript = alien.GetComponent<Alien>();
-			if (alien.gameObject.activeInHierarchy)
+			if (!alienScript.isDead)
             {
-                if (alien.position.x >= rightEdge + 1.0f || alien.position.x <= leftEdge - 1.0f) 
+                if (!isDropped)
                 {
-                    direction *= -1;
-                    this.transform.position -= new Vector3(0f, 0.5f, 0f);
-
+					if (alien.position.x >= rightEdge + 1.0f || alien.position.x <= leftEdge - 1.0f)
+					{
+						direction *= -1;
+						this.transform.position -= new Vector3(0f, 1.0f, 0f);
+                        isDropped = true;
+					}
 				}
 
 				if (i < 11)

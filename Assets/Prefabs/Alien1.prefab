@@ -88,6 +88,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3962c838afaf4a1408ced90cf09e8aae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scoreVal: 10
+  initialCollision: 1
+  isDead: 0
 --- !u!54 &-6487506440895602290
 Rigidbody:
   m_ObjectHideFlags: 0

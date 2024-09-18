@@ -8,7 +8,9 @@ public class Alien : MonoBehaviour
     //public System.Action alienDeath;
     public int scoreVal = 10;
 
-    public bool initialCollision = true; 
+    public bool initialCollision = true;
+
+    public bool isDead = false; 
 
     // Start is called before the first frame update
     void Start()
@@ -28,8 +30,9 @@ public class Alien : MonoBehaviour
 
 		if (collider.CompareTag("Bullet") && initialCollision)
 		{
-            //alienDeath.Invoke();
-            AlienBehaviour a = GameObject.Find("Aliens").GetComponent<AlienBehaviour>();
+            isDead = true;
+			//alienDeath.Invoke();
+			AlienBehaviour a = GameObject.Find("Aliens").GetComponent<AlienBehaviour>();
             a.alienDeathCount++;
 
             // change color 

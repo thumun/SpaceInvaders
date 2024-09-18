@@ -8,6 +8,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
+using UnityEngine.UI;
 
 public class HighScoreOut
 {
@@ -66,6 +67,7 @@ public class GlobalTracker : MonoBehaviour
 	public GameObject Loss;
 	public GameObject Win;
 	public GameObject inputName;
+	public Button returnBtn; 
 
 	private HighScoreOut scoreInfo = new HighScoreOut(false, null);	
 
@@ -99,6 +101,8 @@ public class GlobalTracker : MonoBehaviour
 		lives = 1;
 
 		GameOverScreen.SetActive(false);
+
+		returnBtn.onClick.AddListener();
 	}
 
     // Update is called once per frame
@@ -169,7 +173,6 @@ public class GlobalTracker : MonoBehaviour
 			{
 				topScores.Add(new Score(-1, ""));
 			}
-
 		}
 
 		topScores = topScores.OrderBy(x => x.ScoreNumber).ToList();
@@ -184,32 +187,31 @@ public class GlobalTracker : MonoBehaviour
 
 	public void GameOver(bool aliensDefeated)
 	{
-		if (aliensDefeated)
-		{
-			HighScoreObj.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = currScore.ToString();
-			HighScoreObj.gameObject.SetActive(true);
-			ScoreObj.gameObject.SetActive(false);
-		} 
-		else
-		{
-			ScoreObj.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = currScore.ToString();
-			ScoreObj.gameObject.SetActive(true);
-			HighScoreObj.gameObject.SetActive(false);
-		}
-
 		HighScoreOut scoreInfo = checkHighScore(currScore);
 
-		if (scoreInfo.Output)
+		if (aliensDefeated)
 		{
-			// highsscore screen 
 			Win.SetActive(true);
 			Loss.SetActive(false);
-
 		}
 		else
 		{
 			Loss.SetActive(true);
 			Win.SetActive(false);
+		}
+
+		if (scoreInfo.Output)
+		{
+			// highsscore screen 
+			HighScoreObj.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = currScore.ToString();
+			HighScoreObj.gameObject.SetActive(true);
+			ScoreObj.gameObject.SetActive(false);
+		}
+		else
+		{
+			ScoreObj.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = currScore.ToString();
+			ScoreObj.gameObject.SetActive(true);
+			HighScoreObj.gameObject.SetActive(false);
 		}
 
 		GameOverScreen.gameObject.SetActive(true);

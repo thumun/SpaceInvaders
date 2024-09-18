@@ -8,8 +8,7 @@ public class AlienBullet : MonoBehaviour
     public Vector3 dir; 
     public float speed;
 
-	public bool disable = false;
-	private bool initialCollision = true;
+	public GameObject deactivatedState;
 
 	// Start is called before the first frame update
 	void Start()
@@ -21,23 +20,16 @@ public class AlienBullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        if (!disable)
-        {
-			transform.position += speed * Time.deltaTime * dir;
-		}
+
+		transform.position += speed * Time.deltaTime * dir;
         
     }
 
 	private void OnCollisionEnter(Collision collision)
 	{
-		if (initialCollision)
-		{
-			// change color !!
 
-			this.gameObject.GetComponent<Rigidbody>().useGravity = true;
-			initialCollision = false;
-		}
+		Instantiate(deactivatedState, transform.position, Quaternion.identity);
+		Destroy(this.gameObject);
 
 	}
 }

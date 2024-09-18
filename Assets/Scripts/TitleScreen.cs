@@ -25,16 +25,6 @@ public class TitleScreen : MonoBehaviour
 			}
 		}
 
-		/*
-		if (!PlayerPrefs.HasKey("highScore"))
-		{
-			PlayerPrefs.SetInt($"highScore", 0);
-			PlayerPrefs.Save();
-		}
-		*/
-
-        //highScore.gameObject.GetComponent<TextMeshProUGUI>().text = PlayerPrefs.GetInt("highScore").ToString();
-
 		start.onClick.AddListener(StartGame);
 		score.onClick.AddListener(ScoreScreen);
 		quit.onClick.AddListener(QuitGame);
