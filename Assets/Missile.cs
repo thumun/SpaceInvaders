@@ -22,9 +22,9 @@ public class Missile : MonoBehaviour
         //mesh = transform.GetComponent<MeshRenderer>();
 
         possiblePositions.Add(new Vector3(-15.6999998f, -4.5f, 0.0579999983f));
-        possiblePositions.Add(new Vector3(-12.8999996f, 9.19999981f, 0.0579999983f));
+        possiblePositions.Add(new Vector3(-14.8999996f, 9.19999981f, 0.0579999983f));
 		possiblePositions.Add(new Vector3(44f, 9.19999981f, 0.0579999983f));
-		possiblePositions.Add(new Vector3(41f, -2f, 0.0579999983f));
+		possiblePositions.Add(new Vector3(42f, -2f, 0.0579999983f));
 		//possiblePositions.Add(new Vector3(25.7999992f, 20.5f, 0.0579999983f));
 	}
 

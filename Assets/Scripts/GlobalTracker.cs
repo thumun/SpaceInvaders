@@ -182,6 +182,9 @@ public class GlobalTracker : MonoBehaviour
 
 	public void GameOver(bool aliensDefeated)
 	{
+		AlienBehaviour a = GameObject.FindObjectOfType<AlienBehaviour>();
+		a.activate = false;
+
 		scoreInfo = checkHighScore(currScore);
 
 		if (aliensDefeated)

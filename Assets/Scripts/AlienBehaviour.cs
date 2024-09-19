@@ -27,7 +27,9 @@ public class AlienBehaviour : MonoBehaviour
 
 	public AudioClip bulletSound;
 
-	private float ratio = 0.0f; 
+	private float ratio = 0.0f;
+
+    public bool activate = true;
 
     // Start is called before the first frame update
     void Start()
@@ -69,69 +71,80 @@ public class AlienBehaviour : MonoBehaviour
     {
         timer += Time.deltaTime;
 
-		this.transform.position += direction * speed * Time.deltaTime;
+        this.transform.position += direction * speed * Time.deltaTime;
 
         int indx = UnityEngine.Random.Range(0, 11);
         //Debug.Log($"index: {indx}");
         int i = 0;
 
         bool isDropped = false;
-        int aliveAliens = 0; 
+        int aliveAliens = 0;
 
-		foreach (Transform alien in transform)
+        if (activate)
         {
 
-            Alien alienScript = alien.GetComponent<Alien>();
-			if (!alienScript.isDead)
+            foreach (Transform alien in transform)
             {
-                aliveAliens++;
-                if (!isDropped)
+
+                Alien alienScript = alien.GetComponent<Alien>();
+                if (!alienScript.isDead)
                 {
-					if (alien.position.x >= rightEdge)
-					{
-						direction *= -1;
-
-						//direction *= -1;
-						this.transform.position -= new Vector3(0f, 1.0f, 0f);
-						this.transform.position = new Vector3(transform.position.x - 1.0f, transform.position.y, transform.position.z);
-						isDropped = true;
-					}
-					else if (alien.position.x <= leftEdge)
-					{
-						direction *= -1;
-
-						this.transform.position -= new Vector3(0f, 1.0f, 0f);
-                        this.transform.position = new Vector3(transform.position.x + .0f, transform.position.y, transform.position.z);
-						isDropped = true;
-					}
-				}
-
-				if (i < 11)
-				{
-                    if (i == indx && bulletSpawn <= timer)
+                    aliveAliens++;
+                    if (!isDropped)
                     {
-						AudioSource.PlayClipAtPoint(bulletSound, gameObject.transform.position);
-						// randomly spawn bullets 
-						Instantiate(alienBulletPrefab, new Vector3(alien.transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
-                        timer = 0; 
-					}
-					
-				}
-				
+                        if (alien.position.x >= rightEdge)
+                        {
+                            direction *= -1;
 
-				i += 1;
+                            //direction *= -1;
+                            this.transform.position -= new Vector3(0f, 1.0f, 0f);
+                            this.transform.position = new Vector3(transform.position.x - 1.0f, transform.position.y, transform.position.z);
+                            isDropped = true;
+                        }
+                        else if (alien.position.x <= leftEdge)
+                        {
+                            direction *= -1;
 
-			}
+                            this.transform.position -= new Vector3(0f, 1.0f, 0f);
+                            this.transform.position = new Vector3(transform.position.x + .0f, transform.position.y, transform.position.z);
+                            isDropped = true;
+                        }
+
+                        if (alien.position.y <= -9.0f)
+                        {
+                            // game over 
+                            GlobalTracker g = GameObject.FindObjectOfType<GlobalTracker>();
+                            activate = false;
+                            g.GameOver(false);
+                        }
+                    }
+
+                    if (i < 11)
+                    {
+                        if (i == indx && bulletSpawn <= timer)
+                        {
+                            AudioSource.PlayClipAtPoint(bulletSound, gameObject.transform.position);
+                            // randomly spawn bullets 
+                            Instantiate(alienBulletPrefab, new Vector3(alien.transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
+                            timer = 0;
+                        }
+
+                    }
+
+
+                    i += 1;
+
+                }
+
+            }
+
+            if (ratio <= (float)(transform.childCount - aliveAliens) / (float)transform.childCount)
+            {
+                speed += 0.001f;
+                ratio = (transform.childCount - aliveAliens) / transform.childCount;
+            }
 
         }
-
-		if (ratio <= (float)(transform.childCount - aliveAliens)/ (float) transform.childCount)
-        {
-            speed += 0.001f;
-            ratio = (transform.childCount - aliveAliens) / transform.childCount;
-		}
-
-	}
-
+    }
 
 }
