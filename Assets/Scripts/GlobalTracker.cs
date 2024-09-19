@@ -58,7 +58,7 @@ public class GlobalTracker : MonoBehaviour
 	public float ufoSpawnPeriod;
 	public float ufotimer;
 
-	public int lives = -1;
+	public int lives = 0;
 	public GameObject lifeCount;
 
 	public GameObject GameOverScreen; 
@@ -67,70 +67,65 @@ public class GlobalTracker : MonoBehaviour
 	public GameObject Loss;
 	public GameObject Win;
 	public GameObject inputName;
-	public Button returnBtn; 
+	public Button returnBtn;
 
-	private HighScoreOut scoreInfo = new HighScoreOut(false, null);	
+	public GameObject ufoPrefab;
+	public bool ufoActive;
+
+	private HighScoreOut scoreInfo = new HighScoreOut(false, null);
+	private string newName;
 
 	// Start is called before the first frame update
 	void Start()
     {
-        var scoreDetail = PlayerPrefs.GetString("name_0");
-		if (scoreDetail == "")
+		//var fieldEvent = new InputField.SubmitEvent();
+		//fieldEvent.AddListener();
+		string scoreDetail = PlayerPrefs.GetString("name_0");
+		if (scoreDetail == ",-1")
 		{
 			highScore = 0;
 		}
 		else
 		{
-			var scoreItems = scoreDetail.Split(",");
-			highScore = int.Parse(scoreItems[0]);
+			var scoreItems = scoreDetail.Split(',');
+			highScore = int.Parse(scoreItems[1]);
 		}
 
 		highScoreTxt.GetComponent<TextMeshProUGUI>().text = highScore.ToString();
 
         currScore = 0;
 		ufotimer = 0;
-		ufoSpawnPeriod = 10.0f; // change to higher number
+		ufoSpawnPeriod = 5.0f; // change to higher number
+		ufoActive = false; 
 
-		/*
 		foreach (Transform child in lifeCount.transform)
 		{
 			lives++;
 		}
-		*/
 
-		lives = 1;
+		//lives = 1;
 
 		GameOverScreen.SetActive(false);
 
-		returnBtn.onClick.AddListener();
+		returnBtn.onClick.AddListener(ReturnTitle);
 	}
 
     // Update is called once per frame
     void Update()
     {
+		if (!ufoActive)
+		{
+			ufotimer += Time.deltaTime;
+		}
+
 		currScoreTxt.GetComponent<TextMeshProUGUI>().text = currScore.ToString();
 
-		if (ufotimer > ufoSpawnPeriod)
+		if (ufotimer > ufoSpawnPeriod && !ufoActive)
 		{
-
 			ufotimer = 0;
 
-			//float width = Screen.width;
-			//float height = Screen.height;
-
-			//float horizontalPos = UnityEngine.Random.Range(0.0f, width);
-			//float verticalPos = UnityEngine.Random.Range(0.0f, height);
-
-			//horizontalPos = UnityEngine.Random.Range(0.0f, width);
-			//verticalPos = UnityEngine.Random.Range(0.0f, height);
-			//verticalPos = ship.transform.position.y;
-
-			//Instantiate(ufo, new Vector3(UnityEngine.Random.Range(-9.0f, 10.0f), 0, UnityEngine.Random.Range(-14.0f, 14.0f)), Quaternion.identity);
-
-			// add UFO at the top of the screen 
-
-			// instantiate to the left of the screen 
-			// make it go across the screen? 
+			Instantiate(ufoPrefab, new Vector3(-30.8999996f, 12.5100012f, -5.5f), Quaternion.identity);
+			ufoActive = true;
 		}
 	}
 
@@ -187,7 +182,7 @@ public class GlobalTracker : MonoBehaviour
 
 	public void GameOver(bool aliensDefeated)
 	{
-		HighScoreOut scoreInfo = checkHighScore(currScore);
+		scoreInfo = checkHighScore(currScore);
 
 		if (aliensDefeated)
 		{
@@ -217,21 +212,28 @@ public class GlobalTracker : MonoBehaviour
 		GameOverScreen.gameObject.SetActive(true);
 	}
 
+	public void ReturnTitle()
+	{
+		newName = inputName.GetComponent<TMP_InputField>().text;
+		SceneManager.LoadScene("TitleScreen");
+	}
+
 	private void OnDisable()
 	{
 		if (scoreInfo.Output)
 		{
-			string newName = inputName.GetComponent<TMP_InputField>().text;
+			//string newName = inputName.GetComponent<TMP_InputField>().text;
 			scoreInfo.TopScores.Add(new Score(currScore, newName));
 
-			scoreInfo.TopScores = scoreInfo.TopScores.OrderBy(x => x.ScoreNumber).ToList();
+			scoreInfo.TopScores = scoreInfo.TopScores.OrderByDescending(x => x.ScoreNumber).ToList();
 
 			for (int i = 0; i < 5; i++)
 			{
 				PlayerPrefs.SetString($"name_{i}", scoreInfo.TopScores[i].stringify());
 			}
-			PlayerPrefs.Save();
 		}
-		
+
+		PlayerPrefs.Save();
+
 	}
 }

@@ -17,32 +17,55 @@ public class Ship : MonoBehaviour
 	public float bulletTimer = 0f;
 	public float bulletSpawner = 0.4f;
 
-    // Start is called before the first frame update
-    void Start()
+	public GameObject particles;
+	public GameObject cameraObj;
+
+	GameObject mesh; 
+	//MeshRenderer mesh;
+
+	private float meshTimer; 
+	private float objVisible = 1.0f;
+	bool meshDisabled = false; 
+
+
+	// Start is called before the first frame update
+	void Start()
     {
-		speed = 5.0f;
+		speed = 8.0f;
 		noMovement = false;
-    }
+
+		particles = transform.GetChild(1).gameObject;
+		mesh = transform.GetChild(0).gameObject;
+	}
 
     // Update is called once per frame
     void Update()
     {
+        if (meshDisabled)
+		{
+			meshTimer += Time.deltaTime; 
 
-		bulletTimer += Time.deltaTime;
+			if (objVisible < meshTimer)
+			{
+				enableMesh(); 
+			}
+		}
+
+        bulletTimer += Time.deltaTime;
 
 		if (!noMovement)
 		{
 			if (Input.GetAxis("Horizontal") > 0)
 			{
-				Debug.Log($"Old Pos: {transform.position}");
+				//Debug.Log($"Old Pos: {transform.position}");
 				this.transform.position += Vector3.right * speed * Time.deltaTime;
-				Debug.Log($"DeltaTime: {Time.deltaTime}");
-				Debug.Log($"New Pos: {transform.position}");
+				//Debug.Log($"DeltaTime: {Time.deltaTime}");
+				//Debug.Log($"New Pos: {transform.position}");
 			}
 			else if (Input.GetAxis("Horizontal") < 0)
 			{
 				this.transform.position += Vector3.left * speed * Time.deltaTime;
-				Debug.Log(transform.position);
+				//Debug.Log(transform.position);
 			}
 		}
 
@@ -51,7 +74,7 @@ public class Ship : MonoBehaviour
 			if (Input.GetAxis("Vertical") > 0 && bulletSpawner < bulletTimer)
 			{
 				Vector3 newPos = transform.position;
-				newPos.y = -11f;
+				newPos.y = -10.7f;
 				var b = Instantiate(bulletPrefab, newPos, Quaternion.identity);
 				b.dir = Vector3.up; // can change if can rotate ship 
 				noBullet = true;
@@ -73,18 +96,43 @@ public class Ship : MonoBehaviour
 	{
 		Collider collider = collision.collider;
 
-		Debug.Log(collider.tag);
+		//Debug.Log(collider.tag);
 
 		if (collider.CompareTag("AlienBullet"))
 		{
-			// has explosion 
-
 			// life lost 
 			GlobalTracker g = GameObject.Find("GlobalObj").GetComponent<GlobalTracker>();
 			g.shipLifeController();
 
 			// add camera shake
+			// has explosion 
+			StartCoroutine(Explosion());
 		}
 
+	}
+
+	void enableMesh()
+	{
+		mesh.SetActive(true);
+		particles.SetActive(false);
+		meshDisabled = false;
+		meshTimer = 0f; 
+	}
+
+	IEnumerator Explosion()
+	{
+		//particles.SetActive(false);
+		//this.gameObject.SetActive(false);
+		particles.SetActive(true);
+
+		CameraShake c = cameraObj.GetComponent<CameraShake>();
+		StartCoroutine(c.Shake(0.4f, 2.4f));
+
+		mesh.SetActive(false);
+		meshDisabled = true;
+
+		// add sound effect here 
+
+		yield return null;
 	}
 }

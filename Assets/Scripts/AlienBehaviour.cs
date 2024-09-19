@@ -13,7 +13,7 @@ public class AlienBehaviour : MonoBehaviour
     public int cols;
 
     Vector3 direction = Vector3.right;
-    public float speed = 3.0f;
+    public float speed = 15.0f;
 
     float leftEdge = -11.2f;
     float rightEdge = 41.9f;
@@ -23,11 +23,9 @@ public class AlienBehaviour : MonoBehaviour
     public GameObject alienBulletPrefab;
 
     public float timer;
-    public float bulletSpawn = 0.5f; 
+    public float bulletSpawn = 0.1f;
 
-    //float leftEdge = Camera.main.ViewportToWorldPoint;
-    //float rightEdge = 41.9f;
-
+    private float ratio = 0.0f; 
 
     // Start is called before the first frame update
     void Start()
@@ -36,8 +34,6 @@ public class AlienBehaviour : MonoBehaviour
         cols = 11;
 
 		Vector3 pos = this.transform.position;
-        //Debug.Log(pos);
-
 
         for (int i = 0; i < rows; i++)
         {
@@ -72,18 +68,13 @@ public class AlienBehaviour : MonoBehaviour
         timer += Time.deltaTime;
 
 		this.transform.position += direction * speed * Time.deltaTime;
-		//SpeedUp();
-
-
-		//Debug.Log($"pos: {transform.position}");
-		//Debug.Log($"dir: {direction}");
-		//Debug.Log($"speed: {speed}");
-        //Debug.Log($"time: {Time.deltaTime}");
 
         int indx = UnityEngine.Random.Range(0, 11);
+        //Debug.Log($"index: {indx}");
         int i = 0;
 
-        bool isDropped = false; 
+        bool isDropped = false;
+        int aliveAliens = 0; 
 
 		foreach (Transform alien in transform)
         {
@@ -91,13 +82,25 @@ public class AlienBehaviour : MonoBehaviour
             Alien alienScript = alien.GetComponent<Alien>();
 			if (!alienScript.isDead)
             {
+                aliveAliens++;
                 if (!isDropped)
                 {
-					if (alien.position.x >= rightEdge + 1.0f || alien.position.x <= leftEdge - 1.0f)
+					if (alien.position.x >= rightEdge)
 					{
 						direction *= -1;
+
+						//direction *= -1;
 						this.transform.position -= new Vector3(0f, 1.0f, 0f);
-                        isDropped = true;
+						this.transform.position = new Vector3(transform.position.x - 1.0f, transform.position.y, transform.position.z);
+						isDropped = true;
+					}
+					else if (alien.position.x <= leftEdge)
+					{
+						direction *= -1;
+
+						this.transform.position -= new Vector3(0f, 1.0f, 0f);
+                        this.transform.position = new Vector3(transform.position.x + .0f, transform.position.y, transform.position.z);
+						isDropped = true;
 					}
 				}
 
@@ -106,7 +109,7 @@ public class AlienBehaviour : MonoBehaviour
                     if (i == indx && bulletSpawn <= timer)
                     {
 						// randomly spawn bullets 
-						Instantiate(alienBulletPrefab, transform.position, Quaternion.identity);
+						Instantiate(alienBulletPrefab, new Vector3(alien.transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
                         timer = 0; 
 					}
 					
@@ -118,12 +121,13 @@ public class AlienBehaviour : MonoBehaviour
 			}
 
         }
-    }
 
-    // may need to change this
-    private void SpeedUp()
-    {
-        speed += (float) 5.0 * (alienDeathCount / transform.childCount);
+		if (ratio <= (float)(transform.childCount - aliveAliens)/ (float) transform.childCount)
+        {
+            speed += 0.001f;
+            ratio = (transform.childCount - aliveAliens) / transform.childCount;
+		}
+
 	}
 
 
