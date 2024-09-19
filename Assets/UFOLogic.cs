@@ -11,6 +11,8 @@ public class UFOLogic : MonoBehaviour
 
 	public bool isDead = false;
 
+	public AudioClip deathKnell;
+
 	GlobalTracker g;
 
 	// Start is called before the first frame update
@@ -38,8 +40,10 @@ public class UFOLogic : MonoBehaviour
 	{
 		Collider collider = collision.collider;
 
-		if (collider.CompareTag("Bullet") && initialCollision)
+		if ((collider.CompareTag("Bullet") || collider.CompareTag("MissileBullet")) && initialCollision)
 		{
+			AudioSource.PlayClipAtPoint(deathKnell, gameObject.transform.position);
+
 			isDead = true;
 
 			// change color 

@@ -10,10 +10,12 @@ public class Alien : MonoBehaviour
 
     public bool initialCollision = true;
 
-    public bool isDead = false; 
+    public bool isDead = false;
 
-    // Start is called before the first frame update
-    void Start()
+	public AudioClip deathKnell;
+
+	// Start is called before the first frame update
+	void Start()
     {
         
     }
@@ -28,9 +30,11 @@ public class Alien : MonoBehaviour
 	{
 		Collider collider = collision.collider;
 
-		if (collider.CompareTag("Bullet") && initialCollision)
+		if ((collider.CompareTag("Bullet") || collider.CompareTag("MissileBullet")) && initialCollision)
 		{
-            isDead = true;
+			AudioSource.PlayClipAtPoint(deathKnell, gameObject.transform.position);
+
+			isDead = true;
 			//alienDeath.Invoke();
 			AlienBehaviour a = GameObject.Find("Aliens").GetComponent<AlienBehaviour>();
             a.alienDeathCount++;

@@ -8,6 +8,8 @@ TagManager:
   - AlienBullet
   - Ship
   - UFO
+  - Missile
+  - MissileBullet
   layers:
   - Default
   - TransparentFX

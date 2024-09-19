@@ -25,7 +25,9 @@ public class AlienBehaviour : MonoBehaviour
     public float timer;
     public float bulletSpawn = 0.1f;
 
-    private float ratio = 0.0f; 
+	public AudioClip bulletSound;
+
+	private float ratio = 0.0f; 
 
     // Start is called before the first frame update
     void Start()
@@ -108,6 +110,7 @@ public class AlienBehaviour : MonoBehaviour
 				{
                     if (i == indx && bulletSpawn <= timer)
                     {
+						AudioSource.PlayClipAtPoint(bulletSound, gameObject.transform.position);
 						// randomly spawn bullets 
 						Instantiate(alienBulletPrefab, new Vector3(alien.transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
                         timer = 0; 

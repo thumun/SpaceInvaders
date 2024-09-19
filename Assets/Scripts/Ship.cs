@@ -20,6 +20,9 @@ public class Ship : MonoBehaviour
 	public GameObject particles;
 	public GameObject cameraObj;
 
+	public AudioClip deathKnell;
+	public AudioClip bulletSound;
+
 	GameObject mesh; 
 	//MeshRenderer mesh;
 
@@ -78,7 +81,9 @@ public class Ship : MonoBehaviour
 				var b = Instantiate(bulletPrefab, newPos, Quaternion.identity);
 				b.dir = Vector3.up; // can change if can rotate ship 
 				noBullet = true;
-				bulletTimer = 0f; 
+				bulletTimer = 0f;
+
+				AudioSource.PlayClipAtPoint(bulletSound, gameObject.transform.position);
 			}
 		}
 
@@ -98,8 +103,10 @@ public class Ship : MonoBehaviour
 
 		//Debug.Log(collider.tag);
 
-		if (collider.CompareTag("AlienBullet"))
+		if (collider.CompareTag("AlienBullet") || collider.CompareTag("MissileBullet"))
 		{
+			AudioSource.PlayClipAtPoint(deathKnell, gameObject.transform.position);
+
 			// life lost 
 			GlobalTracker g = GameObject.Find("GlobalObj").GetComponent<GlobalTracker>();
 			g.shipLifeController();
