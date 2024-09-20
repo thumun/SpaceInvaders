@@ -88,6 +88,7 @@ As a note, I found that once this power-up is attained, it is very easy to keep 
 
 # Gameplay Video 
 
+https://drive.google.com/file/d/1UPo-Wm2ZE1AlR9f8Z86L0fKLvtnkqQ3X/view?usp=sharing
 
 # IOS Build Proof
 
