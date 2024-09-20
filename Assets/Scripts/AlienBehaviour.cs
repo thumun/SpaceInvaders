@@ -27,9 +27,10 @@ public class AlienBehaviour : MonoBehaviour
 
 	public AudioClip bulletSound;
 
-	private float ratio = 0.0f;
+	private float ratio = 0f;
 
     public bool activate = true;
+    public Dictionary<int, int> alienTracker = new Dictionary<int, int>();
 
     // Start is called before the first frame update
     void Start()
@@ -50,6 +51,7 @@ public class AlienBehaviour : MonoBehaviour
                 alien.transform.parent = this.transform; // adding as child 
 
                 Alien a = alien.GetComponent<Alien>();
+                a.identifier = i;
                 if (i == 0 || i == 1)
                 {
                     a.scoreVal = 10;
@@ -63,6 +65,11 @@ public class AlienBehaviour : MonoBehaviour
                     a.scoreVal = 30;
                 }
             }
+        }
+
+        for (int j = 0; j < 11; j++)
+        {
+            alienTracker[j] = 0;
         }
     }
 
@@ -97,17 +104,22 @@ public class AlienBehaviour : MonoBehaviour
                             direction *= -1;
 
                             //direction *= -1;
+                            //Debug.Log($"old pos  - right edge: {transform.position}");
                             this.transform.position -= new Vector3(0f, 1.0f, 0f);
                             this.transform.position = new Vector3(transform.position.x - 1.0f, transform.position.y, transform.position.z);
-                            isDropped = true;
+							//Debug.Log($"new pos - right edge: {transform.position}");
+
+							isDropped = true;
                         }
                         else if (alien.position.x <= leftEdge)
                         {
                             direction *= -1;
 
-                            this.transform.position -= new Vector3(0f, 1.0f, 0f);
-                            this.transform.position = new Vector3(transform.position.x + .0f, transform.position.y, transform.position.z);
-                            isDropped = true;
+							//Debug.Log($"old pos  - left edge: {transform.position}");
+							this.transform.position -= new Vector3(0f, 1.0f, 0f);
+                            this.transform.position = new Vector3(transform.position.x + 1.0f, transform.position.y, transform.position.z);
+							//Debug.Log($"new pos  - left edge: {transform.position}");
+							isDropped = true;
                         }
 
                         if (alien.position.y <= -9.0f)
@@ -138,10 +150,26 @@ public class AlienBehaviour : MonoBehaviour
 
             }
 
-            if (ratio <= (float)(transform.childCount - aliveAliens) / (float)transform.childCount)
+            for (int j = 0; j < 11; j++)
             {
-                speed += 0.001f;
+                if (alienTracker[j] == 4)
+                {
+                    // bullet hell activate
+                    Ship s = GameObject.FindObjectOfType<Ship>();
+                    s.bulletHell = true; 
+                    alienTracker[j]++;
+                }
+            }
+
+            //Debug.Log($"childcount: {((float)(transform.childCount - aliveAliens) / (float)transform.childCount)}");
+            //Debug.Log($"ratio: {ratio}");
+
+            if (ratio < (float)(transform.childCount - aliveAliens) / (float)transform.childCount)
+            {
+                speed += 0.005f;
                 ratio = (transform.childCount - aliveAliens) / transform.childCount;
+
+                //Debug.Log($"speed: {speed}");
             }
 
         }

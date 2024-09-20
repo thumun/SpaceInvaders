@@ -66,13 +66,30 @@ public class Missile : MonoBehaviour
 
     private void initiateMissiles()
     {
-
+		List<int> indicies = new List<int>();
 		// instantiate 15 missiles on random places ontop of screen  
 		for (int i = 0; i < 10; i++)
         {
 			int rndNum = Random.Range(-6, 35);
-			Instantiate(missileBullet, new Vector3((float)rndNum, 21.1000004f, 0f), Quaternion.identity);
+
+			if (indicies.Count > 0)
+			{
+				while (indicies.Contains(rndNum))
+				{
+					rndNum = Random.Range(-6, 35);
+				}
+
+				indicies.Add(rndNum);
+			}
+			else
+			{
+				indicies.Add(rndNum);
+			}
+
+			Instantiate(missileBullet, new Vector3((float)indicies[indicies.Count-1], 21.1000004f, 0f), Quaternion.identity);
         }
+
+
 
         Destroy(gameObject);
     }

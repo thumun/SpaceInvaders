@@ -10,6 +10,8 @@ TagManager:
   - UFO
   - Missile
   - MissileBullet
+  - Alien
+  - DeadAlien
   layers:
   - Default
   - TransparentFX

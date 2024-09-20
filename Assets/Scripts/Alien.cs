@@ -14,14 +14,19 @@ public class Alien : MonoBehaviour
 
 	public AudioClip deathKnell;
 
+    public int identifier;
+
+    AlienBehaviour aBehave;
+
 	// Start is called before the first frame update
 	void Start()
     {
-        
-    }
+		aBehave = GameObject.FindObjectOfType<AlienBehaviour>();
 
-    // Update is called once per frame
-    void Update()
+	}
+
+	// Update is called once per frame
+	void Update()
     {
         
     }
@@ -33,6 +38,10 @@ public class Alien : MonoBehaviour
 		if ((collider.CompareTag("Bullet") || collider.CompareTag("MissileBullet")) && initialCollision)
 		{
 			AudioSource.PlayClipAtPoint(deathKnell, gameObject.transform.position);
+
+			this.gameObject.tag = "DeadAlien";
+
+			aBehave.alienTracker[identifier] += 1;
 
 			isDead = true;
 			//alienDeath.Invoke();

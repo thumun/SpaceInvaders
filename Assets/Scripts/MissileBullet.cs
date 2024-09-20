@@ -32,9 +32,12 @@ public class MissileBullet : MonoBehaviour
 	{
 
 		//disable = true;
-
-		Instantiate(deactivatedState, transform.position, Quaternion.identity);
-		Destroy(this.gameObject);
-		
+		Collider collider = collision.collider;
+		if (collider.CompareTag("MissileBullet"))
+		{
+			Instantiate(deactivatedState, transform.position, Quaternion.identity);
+			Destroy(this.gameObject);
+		}
+			
 	}
 }

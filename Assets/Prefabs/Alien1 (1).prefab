@@ -230,6 +230,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Alien1 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4424840973336044855, guid: 2cfac0c2154fadd4093b7bbf151b2708, type: 3}
+      propertyPath: m_TagString
+      value: Alien
+      objectReference: {fileID: 0}
     - target: {fileID: 5444010003661747035, guid: 2cfac0c2154fadd4093b7bbf151b2708, type: 3}
       propertyPath: m_IsTrigger
       value: 0
@@ -325,6 +329,7 @@ MonoBehaviour:
   initialCollision: 1
   isDead: 0
   deathKnell: {fileID: 8300000, guid: a47f11e1691c2b742814440f7fdd462a, type: 3}
+  identifier: 0
 --- !u!54 &8850810244054315563
 Rigidbody:
   m_ObjectHideFlags: 0

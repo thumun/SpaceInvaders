@@ -23,8 +23,11 @@ public class Ship : MonoBehaviour
 	public AudioClip deathKnell;
 	public AudioClip bulletSound;
 
-	GameObject mesh; 
+	GameObject mesh;
 	//MeshRenderer mesh;
+
+	public bool bulletHell;
+	public float bulletHellTimer; 
 
 	private float meshTimer; 
 	private float objVisible = 1.0f;
@@ -37,13 +40,18 @@ public class Ship : MonoBehaviour
 		speed = 8.0f;
 		noMovement = false;
 
+		bulletHell = false;
+
 		particles = transform.GetChild(1).gameObject;
 		mesh = transform.GetChild(0).gameObject;
+
+		bulletHellTimer = 2.0f; 
 	}
 
     // Update is called once per frame
     void Update()
     {
+		Debug.Log($"bullethell: {bulletHell}");
         if (meshDisabled)
 		{
 			meshTimer += Time.deltaTime; 
@@ -74,7 +82,7 @@ public class Ship : MonoBehaviour
 
 		if (!noBullet)
 		{
-			if (Input.GetAxis("Vertical") > 0 && bulletSpawner < bulletTimer)
+			if (Input.GetAxis("Vertical") > 0 && bulletSpawner < bulletTimer && !bulletHell)
 			{
 				Vector3 newPos = transform.position;
 				newPos.y = -10.7f;
@@ -84,6 +92,32 @@ public class Ship : MonoBehaviour
 				bulletTimer = 0f;
 
 				AudioSource.PlayClipAtPoint(bulletSound, gameObject.transform.position);
+			}
+		}
+
+		if (bulletHell /*&& bulletHellTimer > 0f*/)
+		{
+			if (bulletHellTimer > 0f)
+			{
+
+				if (Input.GetAxis("Vertical") > 0 && bulletSpawner < bulletTimer)
+				{
+					Vector3 newPos = transform.position;
+					newPos.y = -10.7f;
+					var b = Instantiate(bulletPrefab, newPos, Quaternion.identity);
+					b.dir = Vector3.up; // can change if can rotate ship 
+										//noBullet = true;
+					bulletTimer = 0f;
+
+					AudioSource.PlayClipAtPoint(bulletSound, gameObject.transform.position);
+
+					bulletHellTimer -= Time.deltaTime;
+				}
+			}
+			else
+			{
+				bulletHell = false;
+				bulletHellTimer = 2.0f; 
 			}
 		}
 
