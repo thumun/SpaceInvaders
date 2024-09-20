@@ -93,6 +93,10 @@ As a note, I found that once this power-up is attained, it is very easy to keep 
 
 Although it does not look great, here is the IOS build: 
 
+![image](https://github.com/user-attachments/assets/333bc879-2f28-4c99-a49e-71cf718d671b | width=100)
+![image](https://github.com/user-attachments/assets/37cee263-1b61-47f1-a094-d6c75300b954 | width=100)
+![image](https://github.com/user-attachments/assets/7c3e77d2-0ee6-463f-bf9f-ec6b0e73c7bf | width=100)
+
 # Credits for Materials Used
 
 Texture for shields: https://www.freepik.com/free-vector/abstract-futuristic-circuit-board-lights-moving-black-surface-poster_36152349.htm#query=sci%20fi%20texture&position=6&from_view=keyword&track=ais_hybrid&uuid=1e53c56c-36ef-4ef7-970c-43cd4939e985
