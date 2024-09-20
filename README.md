@@ -93,9 +93,10 @@ As a note, I found that once this power-up is attained, it is very easy to keep 
 
 Although it does not look great, here is the IOS build: 
 
-![image](https://github.com/user-attachments/assets/333bc879-2f28-4c99-a49e-71cf718d671b | width=100)
-![image](https://github.com/user-attachments/assets/37cee263-1b61-47f1-a094-d6c75300b954 | width=100)
-![image](https://github.com/user-attachments/assets/7c3e77d2-0ee6-463f-bf9f-ec6b0e73c7bf | width=100)
+<img src="https://github.com/user-attachments/assets/333bc879-2f28-4c99-a49e-71cf718d671b" width="100">
+<img src="https://github.com/user-attachments/assets/37cee263-1b61-47f1-a094-d6c75300b954" width="100">
+<img src="https://github.com/user-attachments/assets/7c3e77d2-0ee6-463f-bf9f-ec6b0e73c7bf" width="100">
+
 
 # Credits for Materials Used
 
